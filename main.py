@@ -9,6 +9,8 @@ from pyweb import pydom
 
 @when('change', '#upload')
 
+await pyodide.loadPackage("pandas")
+
 async def processFile(*args):
 	if pydom["input#xmin"][0].value != "":
 		x_min = pydom["input#xmin"][0].value
