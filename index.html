@@ -22,23 +22,14 @@
 <style>
 	.grid-container {
 		display: grid;
-		grid-template-columns: 14% 14% 52% 20%;
+		grid-template-columns: 20% 60% 20%;
 		padding: 0px;
 		border-style: solid;
 		border-color: rgba(0, 0, 255, 0.8);
 		border-width: thick;
 		}
-
-	.data-table {
-		align-items: start;
-		font-size: 90%;
-		background-color: rgba(39, 222, 245, 0.3);
-		border-style: solid;
-		border-color: black;
-		border-width: thin;
-		}
         
-	.models-list {
+	.file-input {
 		vertical-align: top;
 		font-size: 90%;
 		background-color: rgba(39, 222, 245, 0.3);
@@ -95,9 +86,8 @@
 
 <body>
 <div>Upload a .csv spectrum file: <br></div>	
-<div class="row overflow-hidden" id="content">
-    <div class="col mh-100 float-left" id="main">
-        <div id="fileinput"></div>
+<div class="file-input" id="fileinput">
+	Upload a .csv spectrum file: <br>
         <input type="file" name="upload" id="upload">
     </div>
 </div>
