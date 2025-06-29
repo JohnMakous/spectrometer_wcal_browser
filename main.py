@@ -48,20 +48,20 @@ async def processFile(*args):
 	x = dataArray[:,0]
 	y = dataArray[:,1]
 
-	fig1, ax1 = plt.subplots(1, dpi=150, figsize=(5,3))
+	fig1, ax1 = plt.subplots(1, dpi=150, figsize=(5,5))
 	plt.plot(x, y, linewidth=1)
 	#ax1.scatter(x, y, 1)
-	plt.title("Signal vs Frequency", fontsize=6)
-	#plt.xlabel(x_label, fontsize=6)  
-	#plt.ylabel(y_label, fontsize=6)
+	plt.title("Signal vs Frequency", fontsize=8)
+	#plt.xlabel(x_label, fontsize=8)  
+	#plt.ylabel(y_label, fontsize=8)
 	ax1.set_xlabel("Frequency", fontsize=6, labelpad=1)
 	ax1.set_ylabel("Signal", fontsize=6, labelpad=1)
 	ax1.set_xlim(x_min, x_max)
 	ax1.set_ylim(y_min, y_max)
-	ax1.tick_params(axis='x', labelsize=4)
-	ax1.tick_params(axis='y', labelsize=4)
+	ax1.tick_params(axis='x', labelsize=6)
+	ax1.tick_params(axis='y', labelsize=6)
 	#ax1.margins(1)
-	ax1.grid()
+	ax1.grid(linewidth=0.4, zorder=1)
 
 	plt.close('all')
 	
