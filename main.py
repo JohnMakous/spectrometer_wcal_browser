@@ -1,6 +1,6 @@
 from js import document
 from io import BytesIO
-import pandas.pyplot as pd
+import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from pyscript import display
