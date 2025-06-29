@@ -1,2 +1,2 @@
-name = "Matplotlib"
-packages = ["matplotlib"]
+name = "Installing packages using py-config Copy"
+packages = [ "pandas", "matplotlib",]
