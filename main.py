@@ -1,103 +1,69 @@
-import numpy as np
+from js import document
+from io import BytesIO
+import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
-from numpy import loadtxt
-import glob
-#import pylab as p
-import time
-import os
-from pathlib import Path
+import numpy as np
+from pyscript import display
+from pyscript import when
+from pyweb import pydom
 
-folder_path_str = input('Enter /path/to/data folder/):')
-folder_path = Path(folder_path_str)
+@when('change', '#upload')
 
-most_recent_file = None
-most_recent_time = 0
+async def processFile(*args):
+	if pydom["input#xmin"][0].value != "":
+		x_min = pydom["input#xmin"][0].value
+		x_min = float(x_min)
+	else:
+		x_min = 1419
+	
+	if pydom["input#xmax"][0].value != "":
+		x_max = pydom["input#xmax"][0].value
+		x_max= float(x_max)
+	else:
+		x_max = 1422
 
-while True:
-    # iterate over the files in the directory using os.scandir
-    # 
-    for entry in os.scandir(folder_path):
-        if entry.is_file():
-            # get the modification time of the file using entry.stat().st_mtime_ns
-            mod_time = entry.stat().st_mtime_ns
-            if mod_time > most_recent_time:
-                # update the most recent file and its modification time
-                most_recent_file = entry.name
-                most_recent_time = mod_time
+	if pydom["input#ymin"][0].value != "":
+		y_min = pydom["input#ymin"][0].value
+		y_min = float(y_min)
+	else:
+		y_min = 0
+	
+	if pydom["input#ymax"][0].value != "":
+		y_max = pydom["input#ymax"][0].value
+		y_max= float(y_max)
+	else:
+		y_max = 200
 
-    data_set = np.loadtxt(folder_path_str + most_recent_file, delimiter=',')
-    N = len(data_set)                                 
-    
-    spectrum = np.zeros(N)
-    freq = np.ones(N)
-    freq = data_set[:,0]
-    spectrum = data_set[:,1]
+	csv_file = document.getElementById('upload').files.item(0)
+	
+	array_buf = await csv_file.arrayBuffer() # Get arrayBuffer from file
+	file_bytes = array_buf.to_bytes() # convert to raw bytes array 
+	csv_file = BytesIO(file_bytes) # Wrap in Python BytesIO file-like object
+	
+	# Read the CSV file into a Pandas DataFrame
+	df = pd.read_csv(csv_file)
+	#display(df)
+	
+	dataArray = df.to_numpy()
+	x = dataArray[:,0]
+	y = dataArray[:,1]
 
-    average_signal = np.average(spectrum)
-    area = N*average_signal
+	fig1, ax1 = plt.subplots(1, dpi=150, figsize=(5,3))
+	plt.plot(x, y, linewidth=1)
+	#ax1.scatter(x, y, 1)
+	plt.title("Signal vs Frequency", fontsize=6)
+	#plt.xlabel(x_label, fontsize=6)  
+	#plt.ylabel(y_label, fontsize=6)
+	ax1.set_xlabel("Frequency", fontsize=6, labelpad=1)
+	ax1.set_ylabel("Signal", fontsize=6, labelpad=1)
+	ax1.set_xlim(x_min, x_max)
+	ax1.set_ylim(y_min, y_max)
+	ax1.tick_params(axis='x', labelsize=4)
+	ax1.tick_params(axis='y', labelsize=4)
+	#ax1.margins(1)
+	ax1.grid()
 
-    #Graph
-
-    font1 = {'family': 'serif',
-            'color':  'darkblue',
-            'weight': 'bold',
-            'size': 18,
-            }
-
-    font2 = {'family': 'serif',
-            'color':  'darkred',
-            'weight': 'bold',
-            'size': 22,
-            }
-
-    font3 = {'family': 'serif',
-            'color':  'black',
-            'weight': 'bold',
-            'size': 22,
-            }
-
-    graph_title = "Horn Spectrum"
-    graph_subtitle = ""
-
-    fig, ax = plt.subplots(1, figsize=(16, 12))
-    plt.title(graph_title, fontdict=font2)
-    plt.suptitle(graph_subtitle, fontdict=font1)
-
-    #plt.xlim([0,300])
-    #plt.ylim([0,6000])
-    plt.plot(freq, spectrum, label='', color='blue', linewidth=2)
-
-    plt.xlabel("Frequency (MHz)", fontdict=font3)
-    plt.ylabel("Signal", fontdict=font3)
-
-    #Set tick marks
-    # ax.xaxis.set_major_locator(MultipleLocator(500))
-    # ax.xaxis.set_minor_locator(MultipleLocator(100))
-
-    # ax.yaxis.set_major_locator(MultipleLocator(200))
-    # ax.yaxis.set_minor_locator(MultipleLocator(100))
-
-    ax.tick_params(axis='x', labelsize=18)
-    ax.tick_params(axis='y', labelsize=18)
-
-    # Add grid lines
-    plt.grid(visible=True, which='major', color='#666666', linestyle='-', linewidth=1)
-
-    # Show the minor grid lines with very faint and almost transparent grey lines
-    plt.grid(visible=True, which='minor', color='#999999', linestyle='-', alpha=0.2)
-
-    plt.savefig('/home/john/DSPIRA_2025/Spectrometers_browser/current_spectrum.png')
-    #plt.show()
-    plt.close()
-
-    time.sleep(11.23)
-
-    # Output to a file
-
-    #output_array = np.zeros((time_number,2))
-    #output_array[:,0] = time
-    #output_array[:,1] = average_signal
-
-    #textfilename = "Magnitude_Aug2_Lime.csv1"
-    #np.savetxt(textfilename, output_array, delimiter=',')
+	plt.close('all')
+	
+	display(fig1, target='graph', append=False)
+   

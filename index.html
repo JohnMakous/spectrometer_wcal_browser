@@ -1,35 +1,136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<title>Live Horn Spectrum</title>
-<!-- <meta http-equiv="refresh" content="2">  -->
-
-<script>
-window.onload = function() {
-    var image = document.getElementById("spectrum");
-
-    function updateImage() {
-        image.src = image.src.split("?")[0] + "?" + new Date().getTime();
-    }
-
-    setInterval(updateImage, 2000);
-}
-</script>
-
+    <head>
+        <!-- Recommended meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <!-- PyScript CSS -->
+        <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+        <!-- CSS for examples -->
+        <link rel="stylesheet" href="./assets/css/examples.css" />
+        <!-- This script tag bootstraps PyScript -->
+        <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+        <title>Graphmodeling</title>
+    </head>
+	
 <style>
-    img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+	.grid-container {
+		display: grid;
+		grid-template-columns: 14% 14% 52% 20%;
+		padding: 0px;
+		border-style: solid;
+		border-color: rgba(0, 0, 255, 0.8);
+		border-width: thick;
+		}
+
+	.data-table {
+		align-items: start;
+		font-size: 90%;
+		background-color: rgba(39, 222, 245, 0.3);
+		border-style: solid;
+		border-color: black;
+		border-width: thin;
+		}
+        
+	.models-list {
+		vertical-align: top;
+		font-size: 90%;
+		background-color: rgba(39, 222, 245, 0.3);
+		border-style: solid;
+		border-color: black;
+		border-width: thin;
+		}
+	
+	.graph-block {
+		place-content: stretch;
+		background-color: rgba(39, 222, 245, 0.3);
+		align-items: start;
+		border-style: solid;
+		border-color: black;
+		border-width: thin;
+		}
+	
+	.graph-settings	{
+		font-size: 90%;
+		background-color: rgba(39, 222, 245, 0.3);
+		border-style: solid;
+		border-color: black;
+		border-width: thin;
+		}
+
+	.col-25 {
+		float: left;
+		width: 25%;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		}
+
+	.col-75 {
+		float: left;
+		width: 75%;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		}
+
+	.col-60 {
+		float: left;
+		width: 60%;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		}
+
+	.col-40 {
+		float: left;
+		width: 40%;
+		margin-top: 6px;
+		margin-bottom: 6px;
+		}
 </style>
-</head>
 
 <body>
+<div>Upload a .csv spectrum file: <br></div>	
+<div class="row overflow-hidden" id="content">
+    <div class="col mh-100 float-left" id="main">
+        <div id="fileinput"></div>
+        <input type="file" name="upload" id="upload">
+    </div>
+</div>
 
-    
-<h2 align="center">Horn Telescope Spectrum</h2>
-<img id="spectrum" src="/home/john/DSPIRA_2025/Spectrometers_browser/current_spectrum.png?<?php echo time(); ?>" width="1200" height="900">
+<div><br>If the graph does not display, hit the 'Update graph settings' button.</div>
+<div class="graph-block"> 
+	<div class="graph-display" id="graph"></div>
+	<div class="graph-settings">
+		<p><br></p>
+		<p>You can change any of the graph scale values:<br></p>
+		<table border=2>
+		  <tr>
+			<td  colspan="2" style="text-align: center;"><b>Graph Settings</b></td>
+		  </tr>
+		  <tr>
+			<td><label for="xmin">xmin</label></td>
+			<td><input type="xmin" id="xmin" size=8/></td>
+		  </tr>
+		  <tr> 
+			<td><label for="xmax">xmax</label></td>
+			<td><input type="xmax" id="xmax" size=8/></td>
+		  </tr>
+		  <tr>
+			<td><label for="ymin">ymin</label></td>
+			<td><input type="ymin" id="ymin" size=8/></td>
+		  </tr>
+		  <tr> 
+			<td><label for="ymax">ymax</label></td>
+			<td><input type="ymax" id="ymax" size=8/></td>
+		  </tr>
+		</table>
+		<button id="submit-button" type="submit" py-click="processFile">Update graph settings</button>
+	</div>
+</div>
+
+<section class="pyscript">
+	<script type="py" src="./main.py" config="./pyscript.toml"></script>
+</section>
+
 
 </body>
 </html>
