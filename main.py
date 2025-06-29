@@ -1,6 +1,6 @@
 from js import document
 from io import BytesIO
-import pandas as pd
+import pandas.pyplot as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from pyscript import display
@@ -8,8 +8,6 @@ from pyscript import when
 from pyweb import pydom
 
 @when('change', '#upload')
-
-await pyodide.loadPackage("pandas")
 
 async def processFile(*args):
 	if pydom["input#xmin"][0].value != "":
